@@ -1,35 +1,76 @@
 ;;; init.el --- Emacs Home Configuration init -*- lexical-binding: t; -*-
+
 ;; This file is NOT part of GNU Emacs.
 
 ;; Uncomment line below to test if file loading successfully when opening Emacs.
 ;; (message "Init loaded from ~/.emacs.d/init.el")
 
 ;; Sources
+
 ;; https://github.com/goofansu/emacs-config/tree/main
 ;; https://github.com/goofansu
-
 ;; https://github.com/hwadii/home/tree/master
 ;; https://github.com/hwadii
-
 ;; Single Space after Period Sentence Setting from here:
 ;; https://github.com/hwadii/home/blob/master/config/emacs/init.el
-
 ;; Copied better default settings from here:
 ;; https://github.com/goofansu/emacs-config/blob/main/modules/init-better-defaults.el
-
 ;; Copied notmuch settings from here:
 ;; https://github.com/goofansu/emacs-config/blob/main/modules/init-mail.el
-
 ;; Copied ui settings from here:
 ;; https://github.com/goofansu/emacs-config/blob/main/modules/init-ui.el
-
 ;; Copied ux settings from here:
 ;; https://github.com/goofansu/emacs-config/blob/main/modules/init-ux.el
-
 ;; Copied denote config from here:
 ;; https://github.com/goofansu/emacs-config/blob/main/modules/init-writing.el
+;; https://protesilaos.com/codelog/2025-01-16-emacs-org-todo-agenda-basics/
+;; https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
+;; Emacs: a basic and capable configuration
+;; 2024-11-28
+;; Protesilaos Stavrou
+;; https://protesilaos.com/about/
+;; https://github.com/protesilaos
+;; https://github.com/protesilaos/dotfiles
+;; YouTube Video
+;; https://www.youtube.com/watch?v=9lE45khK3qU&t=917s
+;; Properly Installing Emacs on Windows #emacs #windows #coding #programming
+;; Raoul Comninos
+;; https://www.youtube.com/@raoulcomninos
+;; (formely known as Emacs Elements)
+;; https://www.reddit.com/r/emacs/comments/1dwjszy/what_happened_to_emacs_elements/
+;; https://github.com/gnarledgrip/Emacs-Elements
+;; https://github.com/gnarledgrip
+;; https://github.com/ggreer/the_silver_searcher
+;; https://github.com/pprevos/emacs-writing-studio
+;; Peter Prevos
+;; https://github.com/pprevos
+;; Font Type Information
+;; https://protesilaos.com/codelog/2025-02-04-aporetic-fonts-1-0-0/
+;; Iosevka Comfy is discontinued hello Aporetic fonts
+;; 2025-02-04
+;; https://github.com/protesilaos/aporetic
+;; Other font options
+;; https://www.nerdfonts.com/
+;; https://www.nerdfonts.com/font-downloads
+;; https://github.com/abo-abo/avy
+;; https://github.com/abo-abo
+;; Charles Choi
+;; https://github.com/kickingvegas
+;; https://github.com/kickingvegas/casual-avy
+;; https://github.com/kickingvegas/casual
+;; https://github.com/kickingvegas/casual-suite
+;; https://emacsconf.org/2024/talks/casual/
+;; Casual is a project to re-imagine the primary user interface for Emacs using keyboard-driven menus.
 
-;; Bootstrap package.el and use-package
+(use-package csv-mode
+  :ensure t
+  )
+
+(use-package emacs
+  :ensure nil
+  :config
+)
+
 (use-package package
   :ensure nil
   :config
@@ -47,6 +88,8 @@
                 tab-width 4
                 fill-column 80)
   :custom
+  ;; add completion-styles config here?
+  ;; ==================================
   (scroll-margin 2)
   (use-dialog-box nil)
   (use-short-answers t)
@@ -102,7 +145,8 @@
 (use-package modus-themes
   :ensure t
   :init
-  (load-theme 'modus-operandi :no-confirm)
+  ;; (load-theme 'modus-operandi-tinted :no-confirm)
+  (load-theme 'modus-vivendi-tinted :no-confirm)
   :bind ("<f9>" . modus-themes-toggle)
   :custom
   (modus-themes-mixed-fonts t)
@@ -204,16 +248,6 @@
   :ensure t
   )
 
-;; (use-package ispell
-;;   :ensure nil
-;;   :custom
-;;   (ispell-program-name "/opt/homebrew/bin/hunspell"))
-
-;; (use-package flyspell
-;;   :ensure nil
-;;   :after ispell
-;;   :hook ((markdown-mode org-mode) . flyspell-mode))
-
 (use-package olivetti
   :ensure t
   :custom
@@ -233,7 +267,7 @@
   :hook (after-init . savehist-mode))
 
 (use-package org
-  :ensure nil ; do not try to install it as it is built-in
+  :ensure nil
   :config
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
@@ -242,8 +276,6 @@
   (setq org-default-notes-file (concat org-directory "/my_main_notes_file.org"))
   (setq org-agenda-files (list org-directory))
 
-  ;; Learn about the ! and more by reading the relevant section of the
-  ;; Org manual.  Evaluate: (info "(org) Tracking TODO state changes")
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAIT(w!)" "|" "CANCEL(c!)" "DONE(d!)")))
   :custom
@@ -267,31 +299,29 @@
 (use-package casual-suite
   :ensure t
   :config
-  (keymap-set calc-mode-map "C-o" #'casual-calc-tmenu)
-  (keymap-set dired-mode-map "C-o" #'casual-dired-tmenu)
-  (keymap-set isearch-mode-map "C-o" #'casual-isearch-tmenu)
-  (keymap-set ibuffer-mode-map "C-o" #'casual-ibuffer-tmenu)
+  (keymap-set calc-mode-map "C-c o" #'casual-calc-tmenu)
+  (keymap-set dired-mode-map "C-c o" #'casual-dired-tmenu)
+  (keymap-set isearch-mode-map "C-c o" #'casual-isearch-tmenu)
+  (keymap-set ibuffer-mode-map "C-c o" #'casual-ibuffer-tmenu)
   (keymap-set ibuffer-mode-map "F" #'casual-ibuffer-filter-tmenu)
   (keymap-set ibuffer-mode-map "s" #'casual-ibuffer-sortby-tmenu)
-  (keymap-set Info-mode-map "C-o" #'casual-info-tmenu)
-  (keymap-set reb-mode-map "C-o" #'casual-re-builder-tmenu)
-  (keymap-set reb-lisp-mode-map "C-o" #'casual-re-builder-tmenu)
-  (keymap-set bookmark-bmenu-mode-map "C-o" #'casual-bookmarks-tmenu)
-  (keymap-set org-agenda-mode-map "C-o" #'casual-agenda-tmenu)
-  (keymap-global-set "M-g" #'casual-avy-tmenu)
-  (keymap-set symbol-overlay-map "C-o" #'casual-symbol-overlay-tmenu)
-  (keymap-global-set "C-o" #'casual-editkit-main-tmenu))
+  (keymap-set Info-mode-map "C-c o" #'casual-info-tmenu)
+  (keymap-set reb-mode-map "C-c o" #'casual-re-builder-tmenu)
+  (keymap-set reb-lisp-mode-map "C-c o" #'casual-re-builder-tmenu)
+  (keymap-set bookmark-bmenu-mode-map "C-c o" #'casual-bookmarks-tmenu)
+  (keymap-set org-agenda-mode-map "C-c o" #'casual-agenda-tmenu)
+  (keymap-global-set "C-c a" #'casual-avy-tmenu)
+  (keymap-set symbol-overlay-map "C-c o" #'casual-symbol-overlay-tmenu)
+  (keymap-global-set "C-c o" #'casual-editkit-main-tmenu))
 
 (use-package which-key
-  ;; :defer 5
   :ensure t
   :config
   (which-key-mode))
 
-;; Custom functions (kept outside use-package as it's not package-specific)
 (defun drr-load-emacs-init-config ()
   "Visit Emacs main init.el config file."
-  (interactive) 
+  (interactive)
   (find-file "~/.emacs.d/init.el"))
 
 (defun drr-my-reindent-file ()
@@ -321,6 +351,13 @@
   "Inserts the current date in mm-dd-yyyy format"
   (interactive)
   (insert (format-time-string "%m-%d-%Y")))
+
+(use-package org-make-toc
+  :ensure t
+  :hook (org-mode . org-make-toc-mode)
+  :config
+  (message "org-make-toc loaded"))
+(put 'narrow-to-region 'disabled nil)
 
 ;; guix install notmuch
 ;; setup notmuch on the command line
@@ -413,8 +450,61 @@
   (setq mu4e-change-filenames-when-moving t)
   )
 
-(use-package org-make-toc
-  :ensure t
-  :hook (org-mode . org-make-toc-mode)  ; Auto-update on save
+;; guix install hunspell hunspell-dict-en-us
+(use-package ispell
+  :ensure nil
   :config
-  (message "org-make-toc loaded"))
+  ;; Set environment variables
+  (setenv "LANG" "en_US")
+  (setenv "DICPATH" "/home/david/.guix-profile/share/hunspell")
+  (setenv "PATH" (concat (getenv "PATH") ":/home/david/.guix-profile/bin"))
+  
+  ;; Basic configuration
+  (setq ispell-program-name "/home/david/.guix-profile/bin/hunspell")
+  (setq ispell-dictionary "en_US")
+  (setq ispell-hunspell-dict-paths-alist
+        '(("en_US" "/home/david/.guix-profile/share/hunspell/en_US.aff")))
+  (setq ispell-extra-args '("-d" "/home/david/.guix-profile/share/hunspell/en_US"))
+  
+  ;; Enable debug mode
+  (setq ispell-debug t)
+  
+  ;; Custom debug function
+  (defun my-ispell-debug (message &rest args)
+    "Log debug info to *Messages* with MESSAGE and ARGS."
+    (message "[ISPELL DEBUG] %s" (apply 'format message args)))
+  
+  ;; Debug ispell-check-version
+  (advice-add 'ispell-check-version :around
+              (lambda (orig-fun &rest args)
+                (my-ispell-debug "Checking Hunspell version...")
+                (my-ispell-debug "ispell-program-name: %s" ispell-program-name)
+                (my-ispell-debug "ispell-extra-args: %s" ispell-extra-args)
+                (my-ispell-debug "DICPATH: %s" (getenv "DICPATH"))
+                (let ((version (apply orig-fun args)))
+                  (if version
+                      (my-ispell-debug "Hunspell version: %s" version)
+                    (my-ispell-debug "Failed to get version, returned nil"))
+                  version)))
+  
+  ;; Debug dictionary setup
+  (my-ispell-debug "Testing dictionary paths...")
+  (my-ispell-debug "ispell-hunspell-dict-paths-alist: %s" ispell-hunspell-dict-paths-alist)
+  (condition-case err
+      (let ((dictionaries (ispell-find-hunspell-dictionaries)))
+        (my-ispell-debug "Found dictionaries: %s" dictionaries))
+    (error
+     (my-ispell-debug "Error in ispell-find-hunspell-dictionaries: %s" (error-message-string err))))
+  
+  ;; Manual file checks
+  (dolist (file '("/home/david/.guix-profile/bin/hunspell"
+                  "/home/david/.guix-profile/share/hunspell/en_US.aff"
+                  "/home/david/.guix-profile/share/hunspell/en_US.dic"))
+    (if (file-exists-p file)
+        (my-ispell-debug "File exists: %s" file)
+      (my-ispell-debug "File missing: %s" file)))
+  
+  ;; Force dictionary settings if detection fails
+  (setq ispell-dictionary-alist
+        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil
+           ("-d" "/home/david/.guix-profile/share/hunspell/en_US") nil utf-8))))
